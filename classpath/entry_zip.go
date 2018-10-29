@@ -4,6 +4,7 @@ import "archive/zip"
 import "errors"
 import "io/ioutil"
 import "path/filepath"
+import "fmt"
 
 type ZipEntry struct {
   absPath string
@@ -28,6 +29,7 @@ func (self *ZipEntry) readClass(className string) ([]byte, Entry, error) {
     if f.Name == className {
       rc, err := f.Open()
       if err != nil {
+        fmt.Println("open error")
         return nil, nil, err
       }
 
@@ -35,12 +37,15 @@ func (self *ZipEntry) readClass(className string) ([]byte, Entry, error) {
 
       data, err := ioutil.ReadAll(rc)
       if err != nil {
+        fmt.Println("read error")
         return nil, nil, err
       }
 
       return data, self, nil
     }
   }
+
+  return nil, nil, errors.New("class not found" + className)
 }
 
 func (self *ZipEntry) String() string {
