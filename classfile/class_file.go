@@ -36,30 +36,77 @@ type ClassFile struct {
   attributes    []AttributeInfo
 }
 
-func Parse(classData []byte) (cf *ClassFile, err error) {}
+func Parse(classData []byte) (cf *ClassFile, err error) {
+  defer func() {
+    if r := recover(); r != nil {
+      var ok bool
+      err, ok = r.(error)
+      if !ok {
+        err = fmt.Errorf("%v", r)
+      }
+    }
+  }()
 
-func (self *ClassFile) read(reader *ClassReader) {}
+  cr := &ClassReader(classData)
+  cf = &ClassFile{}
+  cf.read(cr)
+  return
+}
+
+func (self *ClassFile) read(reader *ClassReader) {
+  self.readAndCheckMagic(reader)
+  self.readAndCheckVersion(version)
+  self.constantPool = readConstantPool(reader)
+  self.accessFlags = reader.readUint16()
+  self.thisClass = reader.readUint16()
+  self.superClass = reader.readUint16()
+  self.interfaces = reader.readUint16s()
+  self.fields = readMembers(reader, self.constantPool)
+  self.methods = readMembers(reader, self.constantPool)
+  self.attributes = readAttributes(reader, self.constantPool)
+}
 func (self *ClassFile) readAndCheckMagic(reader *ClassReader) {}
 func (self *ClassFile) readAndCheckVersion(reader *ClassReader) {}
 // getter
-func (self *ClassFile) MinorVersion() uint16{}
+func (self *ClassFile) MinorVersion() uint16{
+  return self.minorVersion
+}
 // getter
-func (self *ClassFile) MajorVersion() uint16{}
+func (self *ClassFile) MajorVersion() uint16{
+  return self.majorVersion
+}
 // getter
-func (self *ClassFile) ConstantPool() ConstantPool{}
+func (self *ClassFile) ConstantPool() ConstantPool{
+  return self.constantPool
+}
 // getter
-func (self *ClassFile) AccessFlags() uint16{}
+func (self *ClassFile) AccessFlags() uint16{
+  return self.accessFlags
+}
 // getter
-func (self *ClassFile) Fields() *MemberInfo {}
+func (self *ClassFile) Fields() *MemberInfo {
+  return self.fields
+}
 // getter
-func (self *ClassFile) Methods() *MemberInfo{}
+func (self *ClassFile) Methods() *MemberInfo{
+  return self.methods
+}
 // getter
 func (self *ClassFile) ClassName() string {
-
+  return self.constantPool.getClassName(self.thisClass)
 }
+// getter
 func (self *ClassFile) SuperClassName() string {
-
+  if self.superClass > 0 {
+    return self.constantPool.getClassName(self.superClass)
+  }
+  return "" // java.lang.Object
 }
+// getter
 func (self *ClassFile) InterfaceName() []string {
-
+  interfaceNames := make([]string, len(self.interfaces))
+  for i, cpIndex := range self.interfaces {
+    interfaceNames[i] = self.constantPool.getClassName(cpIndex)
+  }
+  return interfaceNames
 }
