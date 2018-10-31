@@ -11,8 +11,8 @@ type ConstantClassInfo struct {
   nameIndex uint16
 }
 
-func (self *ConstantClassInfo) readInfo(cr *ClassReader) {
-  self.nameIndex = cr.readUint16()
+func (self *ConstantClassInfo) readInfo(reader *ClassReader) {
+  self.nameIndex = reader.readUint16()
 }
 func (self *ConstantClassInfo) Name() string {
   return self.cp.getUtf8(self.nameIndex)
