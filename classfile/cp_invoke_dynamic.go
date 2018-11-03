@@ -28,7 +28,7 @@ type ConstantMethodTypeInfo struct {
 }
 
 func (self *ConstantMethodTypeInfo) readInfo(reader *ClassReader) {
-  self.referenceIndex = reader.readUint16()
+  self.descriptorIndex = reader.readUint16()
 }
 
 

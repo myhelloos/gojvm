@@ -15,27 +15,27 @@ func (self *ClassReader) readUint8() uint8 {
 
 // read u2
 func (self *ClassReader) readUint16() uint16 {
-  val := binary.BigEndian.Unit16(self.data)
-  self.data = self[2:]
+  val := binary.BigEndian.Uint16(self.data)
+  self.data = self.data[2:]
   return val
 }
 
 // read u4
 func (self *ClassReader) readUint32() uint32 {
   val := binary.BigEndian.Uint32(self.data)
-  self.data = self[4:]
+  self.data = self.data[4:]
   return val
 }
 
 func (self *ClassReader) readUint64() uint64 {
   val := binary.BigEndian.Uint64(self.data)
-  self.data = self[8:]
+  self.data = self.data[8:]
   return val
 }
 
 func (self *ClassReader) readUint16s() []uint16 {
   n := self.readUint16()
-  s := make([]unit16, n)
+  s := make([]uint16, n)
   for i := range s {
     s[i] = self.readUint16()
   }

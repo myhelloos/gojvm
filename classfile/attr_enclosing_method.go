@@ -15,8 +15,8 @@ type EnclosingMethodAttribute struct {
 }
 
 func (self *EnclosingMethodAttribute) readInfo(reader *ClassReader) {
-  self.classIndex := reader.readUint16()
-  self.methodIndex := reader.readUint16()
+  self.classIndex = reader.readUint16()
+  self.methodIndex = reader.readUint16()
 }
 
 func (self *EnclosingMethodAttribute) ClassName() string {

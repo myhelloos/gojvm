@@ -9,11 +9,11 @@ Signature_attribute {
 */
 type SignatureAttribute struct {
   cp ConstantPool
-  signatureIndex: uint16
+  signatureIndex uint16
 }
 
 func (self *SignatureAttribute) readInfo(reader ClassReader) {
-  self.signatureIndex := reader.readUint16()
+  self.signatureIndex = reader.readUint16()
 }
 
 func (self *SignatureAttribute) Signature() string {

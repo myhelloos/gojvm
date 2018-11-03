@@ -10,11 +10,11 @@ CONSTANT_Utf8_info {
     u1 bytes[length];
 }
 */
-type ConstantUf8Info struct {
+type ConstantUtf8Info struct {
   str string
 }
 
-func (self *ConstantUf8Info) readInfo(reader *ClassReader) {
+func (self *ConstantUtf8Info) readInfo(reader *ClassReader) {
   length := uint32(reader.readUint16())
   bytes := reader.readBytes(length)
   self.str = decodeMUTF8(bytes)
@@ -70,8 +70,8 @@ func decodeMUTF8(bytes []byte) string {
 			if count > utflen {
 				panic("malformed input: partial character at end")
 			}
-			char2 = uint16(bytearr[count-2])
-			char3 = uint16(bytearr[count-1])
+			char2 = uint16(bytes[count-2])
+			char3 = uint16(bytes[count-1])
 			if char2&0xC0 != 0x80 || char3&0xC0 != 0x80 {
 				panic(fmt.Errorf("malformed input around byte %v", (count - 1)))
 			}

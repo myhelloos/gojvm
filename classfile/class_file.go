@@ -47,7 +47,7 @@ func Parse(classData []byte) (cf *ClassFile, err error) {
     }
   }()
 
-  cr := &ClassReader(classData)
+  cr := &ClassReader{classData}
   cf = &ClassFile{}
   cf.read(cr)
   return
@@ -55,7 +55,7 @@ func Parse(classData []byte) (cf *ClassFile, err error) {
 
 func (self *ClassFile) read(reader *ClassReader) {
   self.readAndCheckMagic(reader)
-  self.readAndCheckVersion(version)
+  self.readAndCheckVersion(reader)
   self.constantPool = readConstantPool(reader)
   self.accessFlags = reader.readUint16()
   self.thisClass = reader.readUint16()
@@ -66,7 +66,7 @@ func (self *ClassFile) read(reader *ClassReader) {
   self.attributes = readAttributes(reader, self.constantPool)
 }
 func (self *ClassFile) readAndCheckMagic(reader *ClassReader) {
-  self.magic := reader.readUint32()
+  self.magic = reader.readUint32()
   if self.magic != 0xCAFEBABE {
     panic("java.lang.ClassFormatError: magic!")
   }
@@ -103,11 +103,11 @@ func (self *ClassFile) AccessFlags() uint16{
   return self.accessFlags
 }
 // getter
-func (self *ClassFile) Fields() *MemberInfo {
+func (self *ClassFile) Fields() []*MemberInfo {
   return self.fields
 }
 // getter
-func (self *ClassFile) Methods() *MemberInfo{
+func (self *ClassFile) Methods() []*MemberInfo{
   return self.methods
 }
 // getter
@@ -122,7 +122,7 @@ func (self *ClassFile) SuperClassName() string {
   return "" // java.lang.Object
 }
 // getter
-func (self *ClassFile) InterfaceName() []string {
+func (self *ClassFile) InterfaceNames() []string {
   interfaceNames := make([]string, len(self.interfaces))
   for i, cpIndex := range self.interfaces {
     interfaceNames[i] = self.constantPool.getClassName(cpIndex)

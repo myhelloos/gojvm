@@ -7,7 +7,7 @@ attribute_info {
     u1 info[attribute_length];
 }
 */
-type AttributeInfo struct {
+type AttributeInfo interface {
   readInfo(reader *ClassReader)
 }
 
@@ -25,10 +25,11 @@ func readAttribute(reader *ClassReader, cp ConstantPool) AttributeInfo {
   attributeName := cp.getUtf8(attributeNameIndex)
   attributeLength := reader.readUint32()
   attributeInfo := newAttributeInfo(attributeName, attributeLength, cp)
+  attributeInfo.readInfo(reader)
   return attributeInfo
 }
 
-fun newAttributeInfo(attributeName string, attributeLength uint32, cp ConstantPool) AttributeInfo {
+func newAttributeInfo(attributeName string, attributeLength uint32, cp ConstantPool) AttributeInfo {
   switch attributeName {
   case "Code":
     return &CodeAttribute{cp: cp}

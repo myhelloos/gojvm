@@ -28,12 +28,12 @@ type CodeAttribute struct {
 }
 
 func (self *CodeAttribute) readInfo(reader *ClassReader) {
-  self.maxStack := reader.readUint16()
-  self.maxLocals := reader.readUint16()
+  self.maxStack = reader.readUint16()
+  self.maxLocals = reader.readUint16()
   codeLength := reader.readUint32()
-  self.code := reader.readBytes(codeLength)
-  self.exceptionTable := readExceptionTable(reader)
-  self.attributes := readAttributes(self, self.cp)
+  self.code = reader.readBytes(codeLength)
+  self.exceptionTable = readExceptionTable(reader)
+  self.attributes = readAttributes(reader, self.cp)
 }
 
 func (self *CodeAttribute) MaxStack() uint {
@@ -48,7 +48,7 @@ func (self *CodeAttribute) Code() []byte {
   return self.code
 }
 
-func (self *CodeAttribute) ExceptionTable() []*ExceptionTable {
+func (self *CodeAttribute) ExceptionTable() []*ExceptionTableEntry {
   return self.exceptionTable
 }
 
@@ -59,32 +59,32 @@ type ExceptionTableEntry struct {
   catchPc uint16
 }
 
-func readExceptionTable(reader *ClassReader) {
+func readExceptionTable(reader *ClassReader) []*ExceptionTableEntry {
   exceptionTableLength := reader.readUint16()
-  exceptionTable := make([]*ExceptionTable, exceptionTableLength)
-  for i := range exceptionTableLength {
-    exceptionTable[i] = &ExceptionTable {
-      startPc: reader.readUint16()
-      endPc: reader.readUint16()
-      handlerPc: reader.readUint16()
-      catchPc: reader.readUint16()
+  exceptionTable := make([]*ExceptionTableEntry, exceptionTableLength)
+  for i := range exceptionTable {
+    exceptionTable[i] = &ExceptionTableEntry {
+      startPc: reader.readUint16(),
+      endPc: reader.readUint16(),
+      handlerPc: reader.readUint16(),
+      catchPc: reader.readUint16(),
     }
   }
   return exceptionTable
 }
 
-func (self *ExceptionTable) StartPc() uint16() {
+func (self *ExceptionTableEntry) StartPc() uint16 {
   return self.startPc
 }
 
-func (self *ExceptionTable) EndPc() uint16() {
+func (self *ExceptionTableEntry) EndPc() uint16 {
   return self.endPc
 }
 
-func (self *ExceptionTable) HandlerPc() uint16() {
+func (self *ExceptionTableEntry) HandlerPc() uint16 {
   return self.handlerPc
 }
 
-func (self *ExceptionTable) CatchPc() uint16() {
+func (self *ExceptionTableEntry) CatchPc() uint16 {
   return self.catchPc
 }

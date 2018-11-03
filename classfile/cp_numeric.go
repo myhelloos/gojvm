@@ -67,7 +67,7 @@ CONSTANT_Double_info {
     u4 low_bytes;
 }
 */
-type ConstantDoubleInfo {
+type ConstantDoubleInfo struct {
   val float64
 }
 

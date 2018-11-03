@@ -16,11 +16,11 @@ Synthetic_attribute {
     u4 attribute_length;
 }
 */
-type SyntheticAttribute {
+type SyntheticAttribute struct {
   MarkerAttribute
 }
 
-type MarkerAttribute {}
+type MarkerAttribute struct {}
 
 func (self *MarkerAttribute) readInfo(reader *ClassReader) {
   // return nothing
