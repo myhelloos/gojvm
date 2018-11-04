@@ -7,7 +7,7 @@ type OperandStack struct {
   slots []Slot
 }
 
-func newOperandSTack(maxStack uint) *OperandStack {
+func newOperandStack(maxStack uint) *OperandStack {
   if maxStack > 0 {
     return &OperandStack{
       slots: make([]Slot, maxStack),
@@ -47,7 +47,7 @@ func (self *OperandStack) PushLong(val int64) {
 func (self *OperandStack) PopLong() int64 {
   self.size -= 2
   low := uint32(self.slots[self.size].num)
-  high := uint32(self.slots[self.size].num)
+  high := uint32(self.slots[self.size+1].num)
   return int64(high)<<32 | int64(low)
 }
 
