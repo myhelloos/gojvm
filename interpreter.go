@@ -21,6 +21,7 @@ func interpret(methodInfo *classfile.MemberInfo) {
   defer catchErr(frame)
   loop(thread, byteCode)
 }
+
 func loop(thread *rtda.Thread, bytecode []byte) {
   frame := thread.PopFrame()
   reader := &base.BytecodeReader{}
