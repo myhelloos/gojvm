@@ -26,6 +26,11 @@ func (self *Frame) OperandStack() *OperandStack {
 func (self *Frame) NextPC() int {
   return self.nextPC
 }
+func (self *Frame) Thread() *Thread {
+  return self.thread
+}
+
+// setter
 func (self *Frame) SetNextPC(nextPC int) {
   self.nextPC = nextPC
 }
