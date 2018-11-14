@@ -16,7 +16,7 @@ type Class struct {
   interfaces []*Class
   instancesSlotCount uint
   staticSlotCount uint
-  staticVars *Slot
+  staticVars Slots
 }
 
 func newClass(cf *classfile.ClassFile) *Class {

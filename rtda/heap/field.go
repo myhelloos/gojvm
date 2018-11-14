@@ -4,6 +4,8 @@ import "jvm-go/classfile"
 
 type Field struct {
   ClassMember
+  constantValueIndex uint
+  slotId uint
 }
 
 func newFields(class *Class, cfFields []*classfile.MemberInfo) []*Field {
@@ -12,8 +14,15 @@ func newFields(class *Class, cfFields []*classfile.MemberInfo) []*Field {
     fields[i] = &Field{}
     fields[i].class = class
     fields[i].copyMemberInfo(cfField)
+    fields[i].copyAttributes(cfField)
   }
   return fields
+}
+
+func (self *Field) copyAttributes(cfField *classfile.MemberInfo) {
+  if valAttr := cfField.ConstantValueAttribute(); valAttr != nil {
+    self.constantValueIndex = uint(valAttr.ConstantValueIndex())
+  }
 }
 
 func (self *Field) IsVolatile() bool {
@@ -24,4 +33,13 @@ func (self *Field) IsTransient() bool {
 }
 func (self *Field) IsEnum() bool {
   return 0 != self.accessFlags&ACC_ENUM
+}
+func (self *Field) SlotId() uint {
+  return self.slotId
+}
+func (self *Field) ConstantValueIndex() uint {
+  return self.constantValueIndex
+}
+func (self *Field) isLongOrDouble() bool {
+  return self.descriptor == "J" || self.descriptor == "D"
 }
