@@ -1,6 +1,9 @@
 package heap
 
-import "jvm-go/classfile"
+import (
+  "jvm-go/classfile"
+  "strings"
+)
 
 // name, superClassName and interfaceNames are all binary names(jvms8-4.2.1)
 type Class struct {
@@ -55,12 +58,23 @@ func (self *Class) IsAnnotation() bool {
 func (self *Class) IsEnum() bool {
   return 0 != self.accessFlags & ACC_ENUM
 }
-
+func (self *Class) isAccessibleTo(other *Class) bool {
+  return self.IsPublic() || self.getPackageName() == other.getPackageName()
+}
 // getter
 func (self *Class) ConstantPool() *ConstantPool {
   return self.constantPool
 }
-
+func (self *Class) getPackageName() string {
+  if i := strings.LastIndex(self.name, "/"); i >= 0 {
+    return self.name[:i]
+  }
+  return ""
+}
 func (self *Class) StaticVars() Slots {
   return self.staticVars
 }
+func (self *Class) isSubClassOf(class *Class) bool {
+
+}
+
