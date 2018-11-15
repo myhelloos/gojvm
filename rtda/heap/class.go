@@ -34,6 +34,10 @@ func newClass(cf *classfile.ClassFile) *Class {
   return class
 }
 
+func (self *Class) NewObject() *Object {
+  return newObject(self)
+}
+
 func (self *Class) IsPublic() bool {
   return 0 != self.accessFlags & ACC_PUBLIC
 }
@@ -77,4 +81,5 @@ func (self *Class) StaticVars() Slots {
 func (self *Class) isSubClassOf(class *Class) bool {
 
 }
+
 

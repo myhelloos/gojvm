@@ -43,3 +43,4 @@ func (self *Field) ConstantValueIndex() uint {
 func (self *Field) isLongOrDouble() bool {
   return self.descriptor == "J" || self.descriptor == "D"
 }
+
