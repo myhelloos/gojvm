@@ -6,6 +6,10 @@ type Object struct {
   // todo
 }
 
+func (self *Object) Fields() Slots {
+  return self.fields
+}
+
 func newObject(class *Class) *Object {
   return &Object{
     class: class,

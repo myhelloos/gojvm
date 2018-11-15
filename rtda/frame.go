@@ -1,10 +1,13 @@
 package rtda
 
+import "jvm-go/rtda/heap"
+
 type Frame struct {
   lower *Frame
   localVars LocalVars
   operandStack *OperandStack
   thread *Thread
+  method *heap.Method
   nextPC int
 }
 
@@ -28,6 +31,9 @@ func (self *Frame) NextPC() int {
 }
 func (self *Frame) Thread() *Thread {
   return self.thread
+}
+func (self *Frame) Method() *heap.Method {
+  return self.method
 }
 
 // setter

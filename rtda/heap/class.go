@@ -83,3 +83,4 @@ func (self *Class) isSubClassOf(class *Class) bool {
 }
 
 
+
