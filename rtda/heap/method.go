@@ -9,7 +9,7 @@ type Method struct {
   code      []byte
 }
 
-func newMethos(class *Class, cfMethods []*classfile.MemberInfo) []*Method {
+func newMethods(class *Class, cfMethods []*classfile.MemberInfo) []*Method {
   methods := make([]*Method, len(cfMethods))
   for i, cfMethod := range cfMethods {
     methods[i] = &Method{}
@@ -20,7 +20,7 @@ func newMethos(class *Class, cfMethods []*classfile.MemberInfo) []*Method {
   return methods
 }
 
-func (self Method) copyAttributes(cfMethod *classfile.MemberInfo) {
+func (self *Method) copyAttributes(cfMethod *classfile.MemberInfo) {
   if codeAttr := cfMethod.CodeAttribute(); codeAttr != nil {
     self.maxStack = codeAttr.MaxStack()
     self.maxLocals = codeAttr.MaxLocals()

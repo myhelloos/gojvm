@@ -7,19 +7,19 @@ import (
 
 // name, superClassName and interfaceNames are all binary names(jvms8-4.2.1)
 type Class struct {
-  accessFlags uint16
-  name string // thisClassName
-  superClassName string
-  interfaceNames []string
-  constantPool *ConstantPool
-  fields []*Field
-  methods []*Method
-  loader *ClassLoader
-  superClass *Class
-  interfaces []*Class
+  accessFlags        uint16
+  name               string // thisClassName
+  superClassName     string
+  interfaceNames     []string
+  constantPool       *ConstantPool
+  fields             []*Field
+  methods            []*Method
+  loader             *ClassLoader
+  superClass         *Class
+  interfaces         []*Class
   instancesSlotCount uint
-  staticSlotCount uint
-  staticVars Slots
+  staticSlotCount    uint
+  staticVars         Slots
 }
 
 func newClass(cf *classfile.ClassFile) *Class {
@@ -34,37 +34,34 @@ func newClass(cf *classfile.ClassFile) *Class {
   return class
 }
 
-func (self *Class) NewObject() *Object {
-  return newObject(self)
-}
-
 func (self *Class) IsPublic() bool {
-  return 0 != self.accessFlags & ACC_PUBLIC
+  return 0 != self.accessFlags&ACC_PUBLIC
 }
 func (self *Class) IsFinal() bool {
-  return 0 != self.accessFlags & ACC_FINAL
+  return 0 != self.accessFlags&ACC_FINAL
 }
 func (self *Class) IsSuper() bool {
-  return 0 != self.accessFlags & ACC_SUPER
+  return 0 != self.accessFlags&ACC_SUPER
 }
 func (self *Class) IsInterface() bool {
-  return 0 != self.accessFlags & ACC_INTERFACE
+  return 0 != self.accessFlags&ACC_INTERFACE
 }
 func (self *Class) IsAbstract() bool {
-  return 0 != self.accessFlags & ACC_ABSTRACT
+  return 0 != self.accessFlags&ACC_ABSTRACT
 }
 func (self *Class) IsSynthetic() bool {
-  return 0 != self.accessFlags & ACC_SYNTHETIC
+  return 0 != self.accessFlags&ACC_SYNTHETIC
 }
 func (self *Class) IsAnnotation() bool {
-  return 0 != self.accessFlags & ACC_ANNOTATION
+  return 0 != self.accessFlags&ACC_ANNOTATION
 }
 func (self *Class) IsEnum() bool {
-  return 0 != self.accessFlags & ACC_ENUM
+  return 0 != self.accessFlags&ACC_ENUM
 }
 func (self *Class) isAccessibleTo(other *Class) bool {
   return self.IsPublic() || self.getPackageName() == other.getPackageName()
 }
+
 // getter
 func (self *Class) ConstantPool() *ConstantPool {
   return self.constantPool
@@ -75,12 +72,19 @@ func (self *Class) getPackageName() string {
   }
   return ""
 }
+func (self *Class) GetMainMethod() *Method {
+  return self.getStaticMethod("main", "([Ljava/lang/String;)V")
+}
 func (self *Class) StaticVars() Slots {
   return self.staticVars
 }
-func (self *Class) isSubClassOf(class *Class) bool {
 
+func (self *Class) getStaticMethod(name, descriptor string) *Method {
+  for _, method := range self.methods {
+    if method.IsStatic() &&
+      method.name == name && method.descriptor == descriptor {
+      return method
+    }
+  }
+  return nil
 }
-
-
-

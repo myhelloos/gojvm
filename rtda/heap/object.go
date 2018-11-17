@@ -6,8 +6,15 @@ type Object struct {
   // todo
 }
 
+func (self *Class) NewObject() *Object {
+  return newObject(self)
+}
+
 func (self *Object) Fields() Slots {
   return self.fields
+}
+func (self *Object) IsInstanceOf(class *Class) bool {
+  return class.isAssignableFrom(self.class)
 }
 
 func newObject(class *Class) *Object {
