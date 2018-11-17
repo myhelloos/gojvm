@@ -81,14 +81,14 @@ var (
   astore_1 = &ASTORE_1{}
   astore_2 = &ASTORE_2{}
   astore_3 = &ASTORE_3{}
-  // iastore  = &IASTORE{}
-  // lastore  = &LASTORE{}
-  // fastore  = &FASTORE{}
-  // dastore  = &DASTORE{}
-  // aastore  = &AASTORE{}
-  // bastore  = &BASTORE{}
-  // castore  = &CASTORE{}
-  // sastore  = &SASTORE{}
+  //iastore  = &IASTORE{}
+  //lastore  = &LASTORE{}
+  //fastore  = &FASTORE{}
+  //dastore  = &DASTORE{}
+  //aastore  = &AASTORE{}
+  //bastore  = &BASTORE{}
+  //castore  = &CASTORE{}
+  //sastore  = &SASTORE{}
   pop     = &POP{}
   pop2    = &POP2{}
   dup     = &DUP{}
@@ -154,12 +154,12 @@ var (
   fcmpg   = &FCMPG{}
   dcmpl   = &DCMPL{}
   dcmpg   = &DCMPG{}
-  // ireturn = &IRETURN{}
-  // lreturn = &LRETURN{}
-  // freturn = &FRETURN{}
-  // dreturn = &DRETURN{}
-  // areturn = &ARETURN{}
-  //_return = &RETURN{}
+  ireturn = &IRETURN{}
+  lreturn = &LRETURN{}
+  freturn = &FRETURN{}
+  dreturn = &DRETURN{}
+  areturn = &ARETURN{}
+  _return = &RETURN{}
   // arraylength   = &ARRAY_LENGTH{}
   // athrow        = &ATHROW{}
   // monitorenter  = &MONITOR_ENTER{}
@@ -513,16 +513,16 @@ func NewInstruction(opcode byte) base.Instruction {
     return &TABLE_SWITCH{}
   case 0xab:
     return &LOOKUP_SWITCH{}
-    // case 0xac:
-    // 	return ireturn
-    // case 0xad:
-    // 	return lreturn
-    // case 0xae:
-    // 	return freturn
-    // case 0xaf:
-    // 	return dreturn
-    // case 0xb0:
-    // 	return areturn
+    case 0xac:
+    	return ireturn
+    case 0xad:
+    	return lreturn
+    case 0xae:
+    	return freturn
+    case 0xaf:
+    	return dreturn
+    case 0xb0:
+    	return areturn
     case 0xb1:
       return _return
   case 0xb2:
@@ -537,12 +537,12 @@ func NewInstruction(opcode byte) base.Instruction {
     return &INVOKE_VIRTUAL{}
   case 0xb7:
     return &INVOKE_SPECIAL{}
-    // case 0xb8:
-    // 	return &INVOKE_STATIC{}
-    // case 0xb9:
-    // 	return &INVOKE_INTERFACE{}
-    // case 0xba:
-    // 	return &INVOKE_DYNAMIC{}
+    case 0xb8:
+    	return &INVOKE_STATIC{}
+    case 0xb9:
+    	return &INVOKE_INTERFACE{}
+    //case 0xba:
+      //	return &INVOKE_DYNAMIC{}
   case 0xbb:
     return &NEW{}
     // case 0xbc:

@@ -12,14 +12,18 @@ JVM
         OperandStack
 */
 type Thread struct {
-   pc int
-   stack *Stack
+  pc    int
+  stack *Stack
 }
 
 func NewThread() *Thread {
   return &Thread{
     stack: newStack(1024),
   }
+}
+
+func (self *Thread) NewFrame(method *heap.Method) *Frame {
+  return newFrame(self, method)
 }
 
 func (self *Thread) PC() int {
@@ -41,6 +45,9 @@ func (self *Thread) PopFrame() *Frame {
 func (self *Thread) CurrentFrame() *Frame {
   return self.stack.top()
 }
-func (self *Thread) NewFrame(method *heap.Method) *Frame {
-  return newFrame(self, method)
+func (self *Thread) TopFrame() *Frame {
+  return self.stack.top()
+}
+func (self *Thread) IsStackEmpty() bool {
+  return self.stack.IsEmpty()
 }

@@ -59,24 +59,30 @@ func (self *Class) IsEnum() bool {
   return 0 != self.accessFlags&ACC_ENUM
 }
 func (self *Class) isAccessibleTo(other *Class) bool {
-  return self.IsPublic() || self.getPackageName() == other.getPackageName()
+  return self.IsPublic() || self.GetPackageName() == other.GetPackageName()
 }
 
 // getter
 func (self *Class) ConstantPool() *ConstantPool {
   return self.constantPool
 }
-func (self *Class) getPackageName() string {
+func (self *Class) GetPackageName() string {
   if i := strings.LastIndex(self.name, "/"); i >= 0 {
     return self.name[:i]
   }
   return ""
 }
-func (self *Class) GetMainMethod() *Method {
-  return self.getStaticMethod("main", "([Ljava/lang/String;)V")
+func (self *Class) Name() string {
+  return self.name
 }
 func (self *Class) StaticVars() Slots {
   return self.staticVars
+}
+func (self *Class) SuperClass() *Class {
+  return self.superClass
+}
+func (self *Class) GetMainMethod() *Method {
+  return self.getStaticMethod("main", "([Ljava/lang/String;)V")
 }
 
 func (self *Class) getStaticMethod(name, descriptor string) *Method {
