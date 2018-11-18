@@ -1,6 +1,8 @@
 package heap
 
-import "jvm-go/classfile"
+import (
+  "jvm-go/classfile"
+)
 
 type ClassMember struct {
   accessFlags uint16

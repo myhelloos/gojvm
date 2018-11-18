@@ -26,7 +26,6 @@ func (self *INVOKE_INTERFACE) Execute(frame *rtda.Frame) {
   if resolveMethod.IsStatic() || resolveMethod.IsPrivate() {
     panic("java.lang.IncompatibleClassChangeError")
   }
-
   ref := frame.OperandStack().GetRefFromTop(resolveMethod.ArgSlotCount() - 1)
   if ref == nil {
     panic("java.lang.NullPointerException")

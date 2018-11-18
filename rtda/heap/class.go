@@ -20,6 +20,7 @@ type Class struct {
   instancesSlotCount uint
   staticSlotCount    uint
   staticVars         Slots
+  initStarted        bool
 }
 
 func newClass(cf *classfile.ClassFile) *Class {
@@ -81,10 +82,15 @@ func (self *Class) StaticVars() Slots {
 func (self *Class) SuperClass() *Class {
   return self.superClass
 }
+func (self *Class) InitStarted() bool {
+  return self.initStarted
+}
 func (self *Class) GetMainMethod() *Method {
   return self.getStaticMethod("main", "([Ljava/lang/String;)V")
 }
-
+func (self *Class) GetClinitMethod() *Method {
+  return self.getStaticMethod("<clinit>", "()V")
+}
 func (self *Class) getStaticMethod(name, descriptor string) *Method {
   for _, method := range self.methods {
     if method.IsStatic() &&
@@ -93,4 +99,9 @@ func (self *Class) getStaticMethod(name, descriptor string) *Method {
     }
   }
   return nil
+}
+
+// setter
+func (self *Class) StartInit() {
+  self.initStarted = true
 }
