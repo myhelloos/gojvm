@@ -5,6 +5,13 @@ type Object struct {
   data  interface{}
 }
 
+func newObject(class *Class) *Object {
+  return &Object{
+    class: class,
+    data:  newSlots(class.instancesSlotCount),
+  }
+}
+
 func (self *Object) Fields() Slots {
   return self.data.(Slots)
 }
@@ -13,11 +20,4 @@ func (self *Object) Class() *Class {
 }
 func (self *Object) IsInstanceOf(class *Class) bool {
   return class.isAssignableFrom(self.class)
-}
-
-func newObject(class *Class) *Object {
-  return &Object{
-    class: class,
-    data:  newSlots(class.instancesSlotCount),
-  }
 }

@@ -47,6 +47,8 @@ func (self *INVOKE_VIRTUAL) Execute(frame *rtda.Frame) {
   }
   base.InvokeMethod(frame, methodToBeInvoked)
 }
+
+// hack!
 func _println(stack *rtda.OperandStack, descriptor string) {
   switch descriptor {
   case "(Z)V":

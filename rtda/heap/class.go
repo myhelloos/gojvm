@@ -89,6 +89,9 @@ func (self *Class) SuperClass() *Class {
 func (self *Class) InitStarted() bool {
   return self.initStarted
 }
+func (self *Class) Loader() *ClassLoader {
+  return self.loader
+}
 func (self *Class) GetMainMethod() *Method {
   return self.getStaticMethod("main", "([Ljava/lang/String;)V")
 }
@@ -108,4 +111,47 @@ func (self *Class) getStaticMethod(name, descriptor string) *Method {
 // setter
 func (self *Class) StartInit() {
   self.initStarted = true
+}
+func (self *Class) ArrayClass() *Class {
+  arrayClassName := getArrayClassName(self.name)
+  return self.loader.LoadClass(arrayClassName)
+}
+func (self *Class) ComponentClass() *Class {
+  componentClassName := getComponentClassName(self.name)
+  return self.loader.LoadClass(componentClassName)
+}
+func (self *Class) isJlObject() bool {
+  return self.name == "java/lang/Object"
+}
+func (self *Class) isJlCloneable() bool {
+  return self.name == "java/lang/Cloneable"
+}
+func (self *Class) isJioSerializable() bool {
+  return self.name == "java/io/Serializable"
+}
+
+func getComponentClassName(className string) string {
+  if className[0] == '[' {
+    componentTypeDescriptor := className[1:]
+    return toClassName(componentTypeDescriptor)
+  }
+  panic("Not array: " + className)
+}
+func toClassName(descriptor string) string {
+  // array
+  if descriptor[0] == '[' {
+    return descriptor
+  }
+  // object
+  if descriptor[0] == 'L' {
+    return descriptor[1 : len(descriptor)-1]
+  }
+  // primitive
+  for className, d := range primitiveTypes {
+    if d == descriptor {
+      return className
+    }
+  }
+
+  panic("Invalid descriptor: " + descriptor)
 }

@@ -24,6 +24,9 @@ func (self *ClassLoader) LoadClass(name string) *Class {
   if class, ok := self.classMap[name]; ok {
     return class // loaded class
   }
+  if self.verboseFlag {
+    fmt.Printf("[Loading start %s]\n", name)
+  }
   if name[0] == '[' {
     return self.loadArrayClass(name)
   }

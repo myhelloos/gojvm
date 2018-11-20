@@ -23,17 +23,17 @@ ClassFile {
 }
 */
 type ClassFile struct {
-  magic         uint32
-  minorVersion  uint16
-  majorVersion  uint16
-  constantPool  ConstantPool
-  accessFlags   uint16
-  thisClass     uint16
-  superClass    uint16
-  interfaces    []uint16
-  fields        []*MemberInfo
-  methods       []*MemberInfo
-  attributes    []AttributeInfo
+  magic        uint32
+  minorVersion uint16
+  majorVersion uint16
+  constantPool ConstantPool
+  accessFlags  uint16
+  thisClass    uint16
+  superClass   uint16
+  interfaces   []uint16
+  fields       []*MemberInfo
+  methods      []*MemberInfo
+  attributes   []AttributeInfo
 }
 
 func Parse(classData []byte) (cf *ClassFile, err error) {
@@ -86,34 +86,42 @@ func (self *ClassFile) readAndCheckVersion(reader *ClassReader) {
   }
   panic("java.lang.UnsupportedClassVersionError!")
 }
+
 // getter
-func (self *ClassFile) MinorVersion() uint16{
+func (self *ClassFile) MinorVersion() uint16 {
   return self.minorVersion
 }
+
 // getter
-func (self *ClassFile) MajorVersion() uint16{
+func (self *ClassFile) MajorVersion() uint16 {
   return self.majorVersion
 }
+
 // getter
-func (self *ClassFile) ConstantPool() ConstantPool{
+func (self *ClassFile) ConstantPool() ConstantPool {
   return self.constantPool
 }
+
 // getter
-func (self *ClassFile) AccessFlags() uint16{
+func (self *ClassFile) AccessFlags() uint16 {
   return self.accessFlags
 }
+
 // getter
 func (self *ClassFile) Fields() []*MemberInfo {
   return self.fields
 }
+
 // getter
-func (self *ClassFile) Methods() []*MemberInfo{
+func (self *ClassFile) Methods() []*MemberInfo {
   return self.methods
 }
+
 // getter
 func (self *ClassFile) ClassName() string {
   return self.constantPool.getClassName(self.thisClass)
 }
+
 // getter
 func (self *ClassFile) SuperClassName() string {
   if self.superClass > 0 {
@@ -121,6 +129,7 @@ func (self *ClassFile) SuperClassName() string {
   }
   return "" // java.lang.Object
 }
+
 // getter
 func (self *ClassFile) InterfaceNames() []string {
   interfaceNames := make([]string, len(self.interfaces))
