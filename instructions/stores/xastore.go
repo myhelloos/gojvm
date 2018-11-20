@@ -13,14 +13,14 @@ type AASTORE struct {
 
 func (self *AASTORE) Execute(frame *rtda.Frame) {
   stack := frame.OperandStack()
-  val := stack.PopInt()
+  ref := stack.PopRef()
   index := stack.PopInt()
   arrRef := stack.PopRef()
 
   checkNotNil(arrRef)
-  ints := arrRef.Ints()
-  checkIndex(len(ints), index)
-  ints[index] = int32(val)
+  refs := arrRef.Refs()
+  checkIndex(len(refs), index)
+  refs[index] = ref
 }
 
 // Store into byte or boolean array

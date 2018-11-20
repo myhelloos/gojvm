@@ -20,7 +20,7 @@ func (self *EnclosingMethodAttribute) readInfo(reader *ClassReader) {
 }
 
 func (self *EnclosingMethodAttribute) ClassName() string {
-  return self.cp.getUtf8(self.classIndex)
+  return self.cp.getClassName(self.classIndex)
 }
 
 func (self *EnclosingMethodAttribute) MethodNameAndDescriptor() (string, string) {
