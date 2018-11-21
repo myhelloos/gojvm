@@ -43,7 +43,7 @@ func (self LocalVars) GetLong(index uint) int64 {
   low := uint32(self[index].num)
   high := uint32(self[index+1].num)
 
-  return int64(high) << 32 | int64(low)
+  return int64(high)<<32 | int64(low)
 }
 
 // double consumes two slots
@@ -66,4 +66,7 @@ func (self LocalVars) GetRef(index uint) *heap.Object {
 }
 func (self LocalVars) SetSlot(index uint, slot Slot) {
   self[index] = slot
+}
+func (self LocalVars) GetThis() *heap.Object {
+  return self.GetRef(0)
 }

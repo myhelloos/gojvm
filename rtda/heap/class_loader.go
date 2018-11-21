@@ -13,11 +13,14 @@ type ClassLoader struct {
 }
 
 func NewClassLoader(cp *classpath.Classpath, verboseFlag bool) *ClassLoader {
-  return &ClassLoader{
+  loader := &ClassLoader{
     cp:          cp,
     verboseFlag: verboseFlag,
     classMap:    make(map[string]*Class),
   }
+  loader.loadBasicClasses()
+  loader.loadPrimitiveClasses()
+  return loader
 }
 
 func (self *ClassLoader) LoadClass(name string) *Class {
@@ -27,10 +30,17 @@ func (self *ClassLoader) LoadClass(name string) *Class {
   if self.verboseFlag {
     fmt.Printf("[Loading start %s]\n", name)
   }
-  if name[0] == '[' {
-    return self.loadArrayClass(name)
+  var class *Class
+  if name[0] == '[' { // array class
+    class = self.loadArrayClass(name)
+  } else {
+    class = self.loadNonArrayClass(name)
   }
-  return self.loadNonArrayClass(name)
+  if jlClassClass, ok := self.classMap["java/lang/Class"]; ok {
+    class.jClass = jlClassClass.NewObject()
+    class.jClass.extra = class
+  }
+  return class
 }
 
 func (self *ClassLoader) loadArrayClass(name string) *Class {
@@ -73,6 +83,31 @@ func (self *ClassLoader) defineClass(data []byte) *Class {
   resolveInterface(class)
   self.classMap[class.name] = class
   return class
+}
+func (self *ClassLoader) loadBasicClasses() {
+  jlClassClass := self.LoadClass("java/lang/Class")
+  for _, class := range self.classMap {
+    if class.jClass == nil {
+      class.jClass = jlClassClass.NewObject()
+      class.jClass.extra = class
+    }
+  }
+}
+func (self *ClassLoader) loadPrimitiveClasses() {
+  for primitiveType, _ := range primitiveTypes {
+    self.loadPrimitiveClass(primitiveType) // primitiveType 是void, int, float等
+  }
+}
+func (self *ClassLoader) loadPrimitiveClass(className string) {
+  class := &Class{
+    accessFlags: ACC_PUBLIC,
+    name:        className,
+    loader:      self,
+    initStarted: true,
+  }
+  class.jClass = self.classMap["java/lang/Class"].NewObject()
+  class.jClass.extra = class
+  self.classMap[className] = class
 }
 
 func parseClass(data []byte) *Class {
@@ -171,7 +206,7 @@ func initStaticFinalVar(class *Class, field *Field) {
       val := cp.GetConstant(cpIndex).(float32)
       vars.SetFloat(slotId, val)
     case "D":
-      val := cp.GetConstant(slotId).(float64)
+      val := cp.GetConstant(cpIndex).(float64)
       vars.SetDouble(slotId, val)
     case "Ljava/lang/String;":
       goStr := cp.GetConstant(cpIndex).(string)

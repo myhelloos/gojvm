@@ -10,7 +10,7 @@ func JString(loader *ClassLoader, goStr string) *Object {
   }
 
   chars := stringToUtf16(goStr)
-  jChars := &Object{loader.LoadClass("[C"), chars}
+  jChars := &Object{loader.LoadClass("[C"), chars, nil}
 
   jStr := loader.LoadClass("java/lang/String").NewObject()
   jStr.SetRefVar("value", "[C", jChars)
@@ -19,7 +19,7 @@ func JString(loader *ClassLoader, goStr string) *Object {
   return jStr
 }
 func stringToUtf16(s string) []uint16 {
-  runes := []rune(s)  // utf32
+  runes := []rune(s) // utf32
   return utf16.Encode(runes)
 }
 func GoString(jStr *Object) string {
