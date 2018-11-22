@@ -10,7 +10,7 @@ type LSTORE struct {
   base.Index8Instruction
 }
 func (self *LSTORE) Execute(frame *rtda.Frame) {
-  _lstore(frame, self.Index)
+  _lstore(frame, uint(self.Index))
 }
 
 type LSTORE_0 struct {

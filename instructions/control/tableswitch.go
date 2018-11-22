@@ -5,11 +5,29 @@ import (
   "jvm-go/instructions/base"
 )
 
+/*
+tableswitch
+<0-3 byte pad>
+defaultbyte1
+defaultbyte2
+defaultbyte3
+defaultbyte4
+lowbyte1
+lowbyte2
+lowbyte3
+lowbyte4
+highbyte1
+highbyte2
+highbyte3
+highbyte4
+jump offsets...
+*/
+// Access jump table by index and jump
 type TABLE_SWITCH struct {
   defaultOffset int32
-  low int32
-  high int32
-  jumpOffset []int32
+  low           int32
+  high          int32
+  jumpOffset    []int32
 }
 
 func (self *TABLE_SWITCH) FetchOperands(reader *base.BytecodeReader) {
@@ -26,7 +44,7 @@ func (self *TABLE_SWITCH) Execute(frame *rtda.Frame) {
 
   var offset int
   if index >= self.low && index <= self.high {
-    offset = int(self.jumpOffset[index - self.low])
+    offset = int(self.jumpOffset[index-self.low])
   } else {
     offset = int(self.defaultOffset)
   }

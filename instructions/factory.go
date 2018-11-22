@@ -135,7 +135,7 @@ var (
   lor         = &LOR{}
   ixor        = &IXOR{}
   lxor        = &LXOR{}
-  i2l         = &I2F{}
+  i2l         = &I2L{}
   i2f         = &I2F{}
   i2d         = &I2D{}
   l2i         = &L2I{}

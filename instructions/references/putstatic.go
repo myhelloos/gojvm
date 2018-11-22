@@ -11,7 +11,7 @@ type PUT_STATIC struct {
   base.Index16Instruction
 }
 
-func (self PUT_STATIC) Execute(frame *rtda.Frame) {
+func (self *PUT_STATIC) Execute(frame *rtda.Frame) {
   currentMethod := frame.Method()
   currentClass := currentMethod.Class()
   cp := currentClass.ConstantPool()
@@ -50,5 +50,7 @@ func (self PUT_STATIC) Execute(frame *rtda.Frame) {
     slots.SetDouble(slotId, stack.PopDouble())
   case 'L', '[':
     slots.SetRef(slotId, stack.PopRef())
+  default:
+    // todo
   }
 }

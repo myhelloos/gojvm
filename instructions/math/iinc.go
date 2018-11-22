@@ -13,7 +13,7 @@ type IINC struct {
 
 func (self *IINC) FetchOperands(reader *base.BytecodeReader) {
   self.Index = uint(reader.ReadUint8())
-  self.Const = int32(reader.ReadUint8())
+  self.Const = int32(reader.ReadInt8())
 }
 
 func (self *IINC) Execute(frame *rtda.Frame) {
