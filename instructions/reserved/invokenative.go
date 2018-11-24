@@ -4,8 +4,8 @@ import (
   "jvm-go/instructions/base"
   "jvm-go/rtda"
   "jvm-go/native"
-  _ "jvm-go/native/java"
   _ "jvm-go/native/java/lang"
+  _ "jvm-go/native/java/sun/misc"
 )
 
 type INVOKE_NATIVE struct {
